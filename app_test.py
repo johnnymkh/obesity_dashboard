@@ -5,7 +5,7 @@ import pandas as pd
 # ---------- 1.  LOAD DATA ---------------------------------
 @st.cache_data  # speeds up reloads
 def load_data():
-    return pd.read_csv("C:/Users/Johnny/OneDrive/Desktop/382 FILES/BEFA58B_ALL_LATEST.csv")
+    return pd.read_csv("https://raw.githubusercontent.com/johnnymkh/obesity_dashboard/main/BEFA58B_ALL_LATEST.csv")
 
 df = load_data()
 

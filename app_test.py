@@ -3,9 +3,13 @@ import streamlit as st
 import pandas as pd
 
 # ---------- 1.  LOAD DATA ---------------------------------
-@st.cache_data  # speeds up reloads
+@st.cache_data
 def load_data():
-    return pd.read_csv("https://raw.githubusercontent.com/johnnymkh/obesity_dashboard/main/BEFA58B_ALL_LATEST.csv")
+    url = (
+        "https://raw.githubusercontent.com/"
+        "johnnymkh/obesity_dashboard/main/BEFA58B_ALL_LATEST.csv"  # ✅ clean URL
+    )
+    return pd.read_csv(url)
 
 df = load_data()
 
@@ -51,18 +55,19 @@ latest_row  = sub[sub["DIM_TIME"] == latest_year].iloc[0]
 rate        = latest_row["RATE_PER_100_N"]  # prevalence %
 
 # ---------- 4.  DISPLAY -----------------------------------
-st.title("GCC Obesity Dashboard – quick test")
-
 st.metric(
     f"Obesity rate in {country} ({gender_label}) – {latest_year}",
     f"{rate:.1f} %"
 )
 
-# optional: simple trend line
-st.line_chart(
-    sub.sort_values("DIM_TIME").set_index("DIM_TIME")["RATE_PER_100_N"],
-    height=250
+# build a tiny DataFrame for the chart
+chart_df = (
+    sub.sort_values("DIM_TIME")
+       .set_index("DIM_TIME")[["RATE_PER_100_N"]]   # brackets → DataFrame
 )
+
+st.line_chart(chart_df, height=250)
+
 
 st.caption(
     "Source: BEFA58B_ALL_LATEST.csv – RATE_PER_100_N = prevalence "
